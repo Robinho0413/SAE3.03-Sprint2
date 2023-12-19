@@ -1,11 +1,19 @@
 import ApexCharts from 'apexcharts'
+// import { M } from "./js/model.js";
+import { V } from "./js/view.js";
 
+let C = {};
 
-//test commit branch
+// await M.init();
+
+C.init = function(){
+  V.init();
+}
+
 
 var options = {
   chart: {
-    type: 'line'
+    type: 'bar'
   },
   series: [{
     name: 'sales',
@@ -19,3 +27,6 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 
 chart.render();
+
+
+C.init();
