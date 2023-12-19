@@ -48,27 +48,9 @@ M.getConcatEvents = function () {
 
 // Itération 2 : Récupère tout les events ou le cours(course) est à l'intérieur.
 M.getEventsWithCourse = function (course) {
-    let allEv = [];
+    let allEv = M.getConcatEvents();
 
-    for (let ev in Events) {
-        let eventObjects = Events[ev].toObject();
-
-        if (Array.isArray(eventObjects)) {
-            for (let i = 0; i < eventObjects.length; i++) {
-                let eventObject = eventObjects[i];
-
-                if (eventObject.title && eventObject.title.includes(course)) {
-                    allEv = allEv.concat(eventObject);
-                }
-                else {
-                    allEv = allEv.concat({});
-                }
-            }
-        }
-    }
-
-    console.log(allEv);
-    return allEv;
+    return allEv.filter( ev => ev.type==course );
 };
 
 
@@ -101,13 +83,10 @@ M.calculateDurationByWeek = function(allCalendars) {
 }
 
 // Fonction Initial qui formate le tableau d'objet.
-M.FormatResults = function(durationByWeek) {
-    const sortedDurationArray = Object.entries(durationByWeek)
-        .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
-        .sort((a, b) => a.weekNumber - b.weekNumber)
-        .map(entry => entry.duration);
-
-    return sortedDurationArray.slice(5).concat(sortedDurationArray.slice(0, 5));
+M.FormatResults = function(result) { 
+    let res2023 = result.slice(36);
+    let res2024 = result.slice(1, 24);
+    return [...res2023, ...res2024];
 }
 
 
@@ -124,12 +103,22 @@ M.getCountsByWeek = function () {
 
 // Fonction Itération 2 
 M.getCountsByWeekWithCourse = function () {
+    let res = new Array(53);
+    for(let i=0; i<res.length; i++){
+        res[i]=0;
+    }
+
     let allCalendars = M.getEventsWithCourse('CM');
 
-    const durationByWeek = M.calculateDurationByWeek(allCalendars);
-    const resultArray = M.FormatResults(durationByWeek);
+    for(let cm of allCalendars ){
+        let nw = cm.start.getWeek();
+        let duration = (cm.end - cm.start) / (3600000);
+        res[nw] += duration;
+    }
 
-    console.log(resultArray);
+  const resultArray = M.FormatResults(res);
+
+    //console.log(resultArray);
 
     return resultArray;
 };
