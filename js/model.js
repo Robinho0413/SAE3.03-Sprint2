@@ -1,113 +1,196 @@
 import ical from 'ical';
+
 import { EventManager } from './class/event-manager';
 
+ 
+
 let Events = {
+
     mmi1: null,
+
     mmi2: null,
+
     mmi3: null
+
 }
+
+ 
 
 let M = {};
 
-Date.prototype.getWeek = function() {
-    var date = new Date(this.getTime());
-    date.setHours(0, 0, 0, 0);
-    // Thursday in current week decides the year.
-    date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-    // January 4 is always in week 1.
-    var week1 = new Date(date.getFullYear(), 0, 4);
-    // Adjust to Thursday in week 1 and count number of weeks from date to week1.
-    return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
-    - 3 + (week1.getDay() + 6) % 7) / 7);
+ 
+
+M.init = async function() {
+
+    let data = await fetch('./data/mmi1.ics');
+
+    data = await data.text();
+
+    data = ical.parseICS(data);
+
+    Events.mmi1 = new EventManager('mmi1', 'MMI 1', 'Agenda des MMI 1');
+
+    Events.mmi1.addEvents(data);
+
+    let data2 = await fetch('./data/mmi2.ics');
+
+    data2 = await data2.text();
+
+    data2 = ical.parseICS(data2);
+
+    Events.mmi2 = new EventManager('mmi2', 'MMI 2', 'Agenda des MMI 2');
+
+    Events.mmi2.addEvents(data2);
+
+ 
+
+    let data3 = await fetch('./data/mmi3.ics');
+
+    data3 = await data3.text();
+
+    data3 = ical.parseICS(data3);
+
+    Events.mmi3 = new EventManager('mmi3', 'MMI 3', 'Agenda des MMI 3');
+
+    Events.mmi3.addEvents(data3);
+
 }
 
-M.getHoursbyWeek = function () {
-    let allCalendars = M.getConcatEvents();
-    let weekNumbers = [];
+ 
 
-    for (let event of allCalendars) {
-        let weekNumber = M.getWeekNumber(event.start);
-        weekNumbers.push(weekNumber);
+M.getEvents = function(annee) {
+
+    if ( annee in Events ) {
+
+        return Events[annee].toObject();
+
     }
 
+    return null;
+
+}
+
+ 
+
+M.getConcatEvents = function () {
+
+    let allEv = []
+
+    for (let ev in Events) {
+
+        if (Events[ev] !== null && typeof Events[ev] !== 'undefined') {
+
+            allEv = allEv.concat(Events[ev].toObject());
+
+        }
+
+    }
+
+    return allEv;
+
+}
+
+ 
+
+Date.prototype.getWeek = function() {
+
+    var date = new Date(this.getTime());
+
+    date.setHours(0, 0, 0, 0);
+
+    // Thursday in current week decides the year.
+
+    date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+
+    // January 4 is always in week 1.
+
+    var week1 = new Date(date.getFullYear(), 0, 4);
+
+    // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+
+    return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
+
+    - 3 + (week1.getDay() + 6) % 7) / 7);
+
+}
+
+ 
+
+M.getHoursbyWeek = function () {
+
+    let allCalendars = M.getConcatEvents();
+
+    let weekNumbers = [];
+
+ 
+
+    for (let event of allCalendars) {
+
+        let weekNumber = new Date(event.start).getWeek();
+
+        weekNumbers.push(weekNumber);
+
+    }
+
+ 
+
     return weekNumbers;
-}
+
+};
 
 
-M.getWeekNumber = function (dateEv) {
-    const date = new Date(dateEv);
-    const weekNumber = date.getWeek();
-    return weekNumber;
-}
 
 
 M.getCountsByWeek = function () {
+
     let allCalendars = M.getConcatEvents();
 
+ 
 
-    const countsByWeek = allCalendars.reduce((acc, event) => {
-        const weekNumber = M.getWeekNumber(event.start);
-        acc[weekNumber] = (acc[weekNumber] || 0) + 1;
-        return acc;
+    const durationByWeek = allCalendars.reduce((acc, event) => {
+
+      const weekNumber = new Date(event.start).getWeek();
+
+      const startDateTime = new Date(event.start).getTime();
+
+      const endDateTime = new Date(event.end).getTime();
+
+      const durationInHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
+
+ 
+
+      acc[weekNumber] = (acc[weekNumber] || 0) + durationInHours;
+
+      return acc;
+
     }, {});
 
+ 
 
-    const countsArray = Object.values(countsByWeek);
+    const sortedDurationArray = Object.entries(durationByWeek)
 
-    return countsArray;
-}
+      .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
 
+      .sort((a, b) => a.weekNumber - b.weekNumber)
 
+      .map(entry => entry.duration);
 
+ 
 
-M.init = async function() {
-    let data = await fetch('./data/mmi1.ics');
-    data = await data.text();
-    data = ical.parseICS(data);
-    Events.mmi1 = new EventManager('mmi1', 'MMI 1', 'Agenda des MMI 1');
-    Events.mmi1.addEvents(data);
-}
+    // Pour commencer à la 7e valeur du tableau
 
-M.getEvents = function(annee) {
-    if ( annee in Events ) {
-        return Events[annee].toObject();
-    }
-    return null;
-}
+    const resultArray = sortedDurationArray.slice(6).concat(sortedDurationArray.slice(0, 6));
 
-M.getConcatEvents = function () {
-    let allEv = []
-    for (let ev in Events) {
-        if (Events[ev] !== null && typeof Events[ev] !== 'undefined') {
-            allEv = allEv.concat(Events[ev].toObject());
-        }
-    }
-    return allEv;
-}
+    console.log(resultArray);
 
+    return resultArray;
 
+  };
 
+ 
 
+ 
 
-
-
-/*M.getHours = function () {
-    let allHours = []
-    for (let )
-}*/
-
-
+ 
 
 export { M };
-
-
-/*
-    On notera que si tout ce qui est dans ce fichier concerne le modèle, seul ce qui est dans M est exporté (et donc accessible depuis l'extérieur).
-    C'est une façon de faire qui permet de garder privé les données "réelles" qui sont dans Events mais dont la visibilité est limitée à ce module/fichier.
-    Donc il faut voir M comme la partie publique de la vue et le reste comme la partie privée.
-    C'est sensiblement différent de ce qu'on faisait jusqu'à présent où tout était dans l'objet M.
-    L'utilisation des modules javascript nous permet ici de choisir ce que l'on veut rendre public ou privé.
-    C'est une autre façon d'implémenter le concept d'encapsulation sans avoir à utiliser les classes.
-    A noter qu'on aurait pu faire une classe "Model" mais dans la mesure où l'on n'aurait qu'une seule instance de Model, ce n'est pas vraiment utile.
-    
-*/

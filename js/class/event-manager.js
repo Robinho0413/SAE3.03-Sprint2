@@ -1,4 +1,4 @@
-import {Event} from './event.js';
+import {Event} from '../../../../../Downloads/SAE-303-main/js/class/event.js';
 
 class EventManager {
     #id;
