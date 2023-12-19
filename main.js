@@ -65,9 +65,10 @@ var chart = new ApexCharts(document.querySelector("#chart"), options);
 
 chart.render();
 
+console.log(M.getConcatEvents())
 
-
-
+const courseEvents = M.getEventsWithCourse('TD');
+console.log(courseEvents);
 
 
 

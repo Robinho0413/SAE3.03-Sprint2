@@ -2,7 +2,7 @@ import ical from 'ical';
 
 import { EventManager } from './class/event-manager';
 
- 
+
 
 let Events = {
 
@@ -14,13 +14,13 @@ let Events = {
 
 }
 
- 
+
 
 let M = {};
 
- 
 
-M.init = async function() {
+
+M.init = async function () {
 
     let data = await fetch('./data/mmi1.ics');
 
@@ -42,7 +42,7 @@ M.init = async function() {
 
     Events.mmi2.addEvents(data2);
 
- 
+
 
     let data3 = await fetch('./data/mmi3.ics');
 
@@ -56,11 +56,11 @@ M.init = async function() {
 
 }
 
- 
 
-M.getEvents = function(annee) {
 
-    if ( annee in Events ) {
+M.getEvents = function (annee) {
+
+    if (annee in Events) {
 
         return Events[annee].toObject();
 
@@ -70,7 +70,7 @@ M.getEvents = function(annee) {
 
 }
 
- 
+
 
 M.getConcatEvents = function () {
 
@@ -90,9 +90,31 @@ M.getConcatEvents = function () {
 
 }
 
- 
+// Itération 2 : Récupère tout les events ou le cours(course) est à l'intérieur.
+M.getEventsWithCourse = function (course) {
+    let allEv = [];
 
-Date.prototype.getWeek = function() {
+    for (let ev in Events) {
+        let eventObjects = Events[ev].toObject();
+
+        if (Array.isArray(eventObjects)) {
+            for (let i = 0; i < eventObjects.length; i++) {
+                let eventObject = eventObjects[i];
+
+                if (eventObject.title && eventObject.title.includes(course)) {
+                    allEv = allEv.concat(eventObject);
+                }
+            }
+        }
+    }
+
+    console.log(allEv);
+    return allEv;
+};
+
+
+// Fonction M.MORA
+Date.prototype.getWeek = function () {
 
     var date = new Date(this.getTime());
 
@@ -110,87 +132,70 @@ Date.prototype.getWeek = function() {
 
     return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
 
-    - 3 + (week1.getDay() + 6) % 7) / 7);
+        - 3 + (week1.getDay() + 6) % 7) / 7);
 
 }
 
- 
 
-M.getHoursbyWeek = function () {
 
+// Fonction Initial qui calcule la durée des cours par numéro de semaine.
+M.calculateDurationByWeek = function(allCalendars) {
+    return allCalendars.reduce((acc, event) => {
+        const weekNumber = new Date(event.start).getWeek();
+        const startDateTime = new Date(event.start).getTime();
+        const endDateTime = new Date(event.end).getTime();
+        const durationInHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
+
+        acc[weekNumber] = (acc[weekNumber] || 0) + durationInHours;
+
+        return acc;
+    }, {});
+}
+
+// Fonction Initial qui formate le tableau d'objet.
+M.FormatResults = function(durationByWeek) {
+    const sortedDurationArray = Object.entries(durationByWeek)
+        .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
+        .sort((a, b) => a.weekNumber - b.weekNumber)
+        .map(entry => entry.duration);
+
+    return sortedDurationArray.slice(6).concat(sortedDurationArray.slice(0, 6));
+}
+
+
+// Fonction Itération 1
+M.getCountsByWeek = function () {
     let allCalendars = M.getConcatEvents();
 
-    let weekNumbers = [];
+    const durationByWeek = M.calculateDurationByWeek(allCalendars);
+    const resultArray = M.FormatResults(durationByWeek);
 
- 
+    console.log(resultArray);
 
-    for (let event of allCalendars) {
+    return resultArray;
+};
 
-        let weekNumber = new Date(event.start).getWeek();
 
-        weekNumbers.push(weekNumber);
+// Fonction Itération 2 
+M.getCountsByWeekWithCourse = function () {
+    let allCalendars = M.getEventsWithCourse('TP');
 
-    }
+    const durationByWeek = M.calculateDurationByWeek(allCalendars);
+    const resultArray = M.FormatResults(durationByWeek);
 
- 
+    console.log(resultArray);
 
-    return weekNumbers;
-
+    return resultArray;
 };
 
 
 
 
-M.getCountsByWeek = function () {
 
-    let allCalendars = M.getConcatEvents();
 
- 
 
-    const durationByWeek = allCalendars.reduce((acc, event) => {
 
-      const weekNumber = new Date(event.start).getWeek();
 
-      const startDateTime = new Date(event.start).getTime();
 
-      const endDateTime = new Date(event.end).getTime();
-
-      const durationInHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
-
- 
-
-      acc[weekNumber] = (acc[weekNumber] || 0) + durationInHours;
-
-      return acc;
-
-    }, {});
-
- 
-
-    const sortedDurationArray = Object.entries(durationByWeek)
-
-      .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
-
-      .sort((a, b) => a.weekNumber - b.weekNumber)
-
-      .map(entry => entry.duration);
-
- 
-
-    // Pour commencer à la 7e valeur du tableau
-
-    const resultArray = sortedDurationArray.slice(6).concat(sortedDurationArray.slice(0, 6));
-
-    console.log(resultArray);
-
-    return resultArray;
-
-  };
-
- 
-
- 
-
- 
 
 export { M };
