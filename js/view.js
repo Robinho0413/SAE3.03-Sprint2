@@ -4,59 +4,37 @@
 
 // import { defineConfig } from 'vite';
 
- 
+
 
 let V = {};
 
- 
 
-V.init = function(){
 
- 
+V.init = function () {
+
+
 
 }
 
- 
 
-V.generateWeekNumbers = function() {
 
-  const excludedNumbers = [44, 52, 1];
+V.generateWeekNumbers = function () {
+    const weekNumbers = [];
+    // Génère les nombres de semaine de 36 à 52
 
-  const weekNumbers = [];
+    for (let i = 36; i <= 52; i++) {
 
- 
+        weekNumbers.push(i);
+    }
 
-  // Génère les nombres de semaine de 36 à 52
+    // Génère les nombres de semaine de 1 à 7
 
-  for (let i = 36; i <= 52; i++) {
+    for (let i = 1; i <= 7; i++) {
 
-      if (!excludedNumbers.includes(i)) {
+        weekNumbers.push(i);
+    }
 
-          weekNumbers.push(i);
-
-      }
-
-  }
-
- 
-
-  // Génère les nombres de semaine de 1 à 7
-
-  for (let i = 1; i <= 7; i++) {
-
-      if (!excludedNumbers.includes(i)) {
-
-          weekNumbers.push(i);
-
-      }
-
-  }
-
- 
-
-  return weekNumbers;
-
- 
+    return weekNumbers;
 
 }
 
