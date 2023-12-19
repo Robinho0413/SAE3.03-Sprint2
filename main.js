@@ -35,7 +35,6 @@ C.handler_changeOnGroup = function(ev){
   //parcourir eventsByGroup
 
 
-  console.log(eventsByGroup);
 
   return(eventsByGroup)
 }
