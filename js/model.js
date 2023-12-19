@@ -45,6 +45,33 @@ M.getConcatEvents = function () {
     return allEv;
 }
 
+
+// Itération 2 : Récupère tout les events ou le cours(course) est à l'intérieur.
+M.getEventsWithCourse = function (course) {
+    let allEv = [];
+
+    for (let ev in Events) {
+        let eventObjects = Events[ev].toObject();
+
+        if (Array.isArray(eventObjects)) {
+            for (let i = 0; i < eventObjects.length; i++) {
+                let eventObject = eventObjects[i];
+
+                if (eventObject.title && eventObject.title.includes(course)) {
+                    allEv = allEv.concat(eventObject);
+                }
+                else {
+                    allEv = allEv.concat({});
+                }
+            }
+        }
+    }
+
+    console.log(allEv);
+    return allEv;
+};
+
+
 Date.prototype.getWeek = function() {
     var date = new Date(this.getTime());
     date.setHours(0, 0, 0, 0);
@@ -57,45 +84,86 @@ Date.prototype.getWeek = function() {
     - 3 + (week1.getDay() + 6) % 7) / 7);
 }
 
-M.getHoursbyWeek = function () {
+
+
+// Fonction Initial qui calcule la durée des cours par numéro de semaine.
+M.calculateDurationByWeek = function(allCalendars) {
+    return allCalendars.reduce((acc, event) => {
+        const weekNumber = new Date(event.start).getWeek();
+        const startDateTime = new Date(event.start).getTime();
+        const endDateTime = new Date(event.end).getTime();
+        const durationInHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
+
+        acc[weekNumber] = (acc[weekNumber] || 0) + durationInHours;
+
+        return acc;
+    }, {});
+}
+
+// Fonction Initial qui formate le tableau d'objet.
+M.FormatResults = function(durationByWeek) {
+    const sortedDurationArray = Object.entries(durationByWeek)
+        .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
+        .sort((a, b) => a.weekNumber - b.weekNumber)
+        .map(entry => entry.duration);
+
+    return sortedDurationArray.slice(5).concat(sortedDurationArray.slice(0, 5));
+}
+
+
+// Fonction Itération 1
+M.getCountsByWeek = function () {
     let allCalendars = M.getConcatEvents();
-    let weekNumbers = [];
 
-    for (let event of allCalendars) {
-        let weekNumber = new Date(event.start).getWeek();
-        weekNumbers.push(weekNumber);
-    }
+    const durationByWeek = M.calculateDurationByWeek(allCalendars);
+    const resultArray = M.FormatResults(durationByWeek);
 
-    return weekNumbers;
+    return resultArray;
+};
+
+
+// Fonction Itération 2 
+M.getCountsByWeekWithCourse = function () {
+    let allCalendars = M.getEventsWithCourse('CM');
+
+    const durationByWeek = M.calculateDurationByWeek(allCalendars);
+    const resultArray = M.FormatResults(durationByWeek);
+
+    console.log(resultArray);
+
+    return resultArray;
 };
 
 
 
-M.getCountsByWeek = function () {
-    let allCalendars = M.getConcatEvents();
+
+
+
+// M.getCountsByWeek = function () {
+//     let allCalendars = M.getConcatEvents();
   
-    const durationByWeek = allCalendars.reduce((acc, event) => {
-      const weekNumber = new Date(event.start).getWeek();
-      const startDateTime = new Date(event.start).getTime();
-      const endDateTime = new Date(event.end).getTime();
-      const durationInHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
+//     const durationByWeek = allCalendars.reduce((acc, event) => {
+//       const weekNumber = new Date(event.start).getWeek();
+//       const startDateTime = new Date(event.start).getTime();
+//       const endDateTime = new Date(event.end).getTime();
+//       const durationInHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
   
-      acc[weekNumber] = (acc[weekNumber] || 0) + durationInHours;
-      return acc;
-    }, {});
+//       acc[weekNumber] = (acc[weekNumber] || 0) + durationInHours;
+//       return acc;
+//     }, {});
   
-    const sortedDurationArray = Object.entries(durationByWeek)
-      .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
-      .sort((a, b) => a.weekNumber - b.weekNumber)
-      .map(entry => entry.duration);
+//     const sortedDurationArray = Object.entries(durationByWeek)
+//       .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
+//       .sort((a, b) => a.weekNumber - b.weekNumber)
+//       .map(entry => entry.duration);
   
-    // Utilisez slice(6) pour commencer à la 7e valeur du tableau
-    const resultArray = sortedDurationArray.slice(6).concat(sortedDurationArray.slice(0, 6));
+//     // Utilisez slice(6) pour commencer à la 7e valeur du tableau
+//     const resultArray = sortedDurationArray.slice(6).concat(sortedDurationArray.slice(0, 6));
   
-    console.log(resultArray);
+//     console.log(resultArray);
   
-    return resultArray;
-  };
+//     return resultArray;
+//   };
   
   
 
