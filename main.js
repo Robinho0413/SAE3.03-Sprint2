@@ -3,6 +3,7 @@ import { M } from "./js/model.js";
 import { V } from "./js/view.js";
 
 let C = {};
+let result; 
 
 await M.init();
 
@@ -132,7 +133,7 @@ C.handler_changeOnGroup = function (ev) {
 
 
 
-let result = V.generateWeekNumbers()
+result = V.generateWeekNumbers()
 
 
 
