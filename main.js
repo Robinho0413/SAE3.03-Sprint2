@@ -16,6 +16,7 @@ C.init = function () {
 
 }
 
+// Itération 2
 M.CreateStackedBar = function (cm, td, tp) {
   let cmcopy = []
   let tdcopy = []
@@ -141,14 +142,6 @@ result = V.generateWeekNumbers()
 // affichage des groupes
 
 
-
-
-
-
-
-
-
-
 // Iteration 1 : Chart volume d'heures de cours par semaine
 
 var options = {
@@ -225,7 +218,7 @@ chart.render();
 
 
 
-
+M.getCountsByWeekSemester('CM', 'BUT2-G3') 
 
 
 C.init();
