@@ -9,7 +9,7 @@ let Events = {
 
 let M = {};
 
-M.init = async function() {
+M.init = async function () {
     let data = await fetch('./data/mmi1.ics');
     data = await data.text();
     data = ical.parseICS(data);
@@ -28,8 +28,8 @@ M.init = async function() {
     Events.mmi3.addEvents(data3);
 }
 
-M.getEvents = function(annee) {
-    if ( annee in Events ) {
+M.getEvents = function (annee) {
+    if (annee in Events) {
         return Events[annee].toObject();
     }
     return null;
@@ -38,25 +38,31 @@ M.getEvents = function(annee) {
 M.getConcatEvents = function () {
     let allEv = []
     for (let ev in Events) {
-        allEv = allEv.concat(Events[ev].toObject());
+        if (Events[ev] !== null && typeof Events[ev] !== 'undefined') {
+            allEv = allEv.concat(Events[ev].toObject());
+        }
     }
     return allEv;
 }
-
-
-
 
 
 // Itération 2 : Récupère tout les events ou le cours(course) est à l'intérieur.
 M.getEventsWithCourse = function (course) {
     let allEv = M.getConcatEvents();
 
-    return allEv.filter( ev => ev.type==course );
+    return allEv.filter(ev => ev.type == course);
+
+};
+
+M.getEventsWithGroup = function (group) {
+    let allEv = M.getConcatEvents();
+
+    return allEv.filter(ev => ev.groups.includes(group));
+
 };
 
 
-
-Date.prototype.getWeek = function() {
+Date.prototype.getWeek = function () {
     var date = new Date(this.getTime());
     date.setHours(0, 0, 0, 0);
     // Thursday in current week decides the year.
@@ -65,13 +71,15 @@ Date.prototype.getWeek = function() {
     var week1 = new Date(date.getFullYear(), 0, 4);
     // Adjust to Thursday in week 1 and count number of weeks from date to week1.
     return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
-    - 3 + (week1.getDay() + 6) % 7) / 7);
+        - 3 + (week1.getDay() + 6) % 7) / 7);
 }
 
 
 
+// Fonction Initial qui calcule la durée des cours par numéro de semaine.
+
 // Fonction Initial qui formate le tableau d'objet.
-M.FormatResults = function(result) { 
+M.FormatResults = function (result) {
     let res2023 = result.slice(36);
     let res2024 = result.slice(1, 8);
     return [...res2023, ...res2024];
@@ -81,52 +89,107 @@ M.FormatResults = function(result) {
 // Fonction Itération 1
 M.getCountsByWeek = function () {
     let res = new Array(53);
-    for(let i=0; i<res.length; i++){
-        res[i]=0;
+    for (let i = 0; i < res.length; i++) {
+        res[i] = 0;
     }
 
     let allCalendars = M.getConcatEvents();
 
-    for(let cm of allCalendars ){
+    for (let cm of allCalendars) {
         let nw = cm.start.getWeek();
-        let duration = (cm.end - cm.start) / (3600000);
+        let duration = (cm.end - cm.start) / (1000 * 60 * 60);
         res[nw] += duration;
     }
 
+
+
     const resultArray = M.FormatResults(res);
 
-    // console.log(resultArray);
+    //console.log(resultArray);
 
     return resultArray;
 };
+
 
 
 // Fonction Itération 2 
-M.getCountsByWeekWithCourse = function (course) {
+M.getCountsByWeekWithCourse = function (course, value) {
     let res = new Array(53);
-    for(let i=0; i<res.length; i++){
-        res[i]=0;
+    for (let i = 0; i < res.length; i++) {
+        res[i] = 0;
     }
 
     let allCalendars = M.getEventsWithCourse(course);
-  
 
-    for(let cm of allCalendars ){
-        let nw = cm.start.getWeek();
-        let duration = (cm.end - cm.start) / (1000 * 60 * 60);;
-        res[nw] += duration;
+    let eventByGroup = [];
+
+
+    if (value !== '0') {
+
+        // allCalendars.filter(ev => ev.groups.includes(value))
+        for(let cal of allCalendars){
+            if(cal.groups.includes(value)){
+                eventByGroup.push(cal);
+            }
+        }
+        for (let cm of eventByGroup) {
+            let nw = cm.start.getWeek();
+            let duration = (cm.end - cm.start) / (1000 * 60 * 60);
+            res[nw] += duration;
+        }
     }
-    
-    
+
+    else {
+        for (let cm of allCalendars) {
+            let nw = cm.start.getWeek();
+            let duration = (cm.end - cm.start) / (1000 * 60 * 60);
+            res[nw] += duration;
+        }
+    }
+
+
     const resultArray = M.FormatResults(res);
+
+
+    //console.log(resultArray);
 
     return resultArray;
 };
 
 
 
-  
-  
+
+
+
+
+
+// M.getCountsByWeek = function () {
+//     let allCalendars = M.getConcatEvents();
+
+//     const durationByWeek = allCalendars.reduce((acc, event) => {
+//       const weekNumber = new Date(event.start).getWeek();
+//       const startDateTime = new Date(event.start).getTime();
+//       const endDateTime = new Date(event.end).getTime();
+//       const durationInHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
+
+//       acc[weekNumber] = (acc[weekNumber] || 0) + durationInHours;
+//       return acc;
+//     }, {});
+
+//     const sortedDurationArray = Object.entries(durationByWeek)
+//       .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
+//       .sort((a, b) => a.weekNumber - b.weekNumber)
+//       .map(entry => entry.duration);
+
+//     // Utilisez slice(6) pour commencer à la 7e valeur du tableau
+//     const resultArray = sortedDurationArray.slice(6).concat(sortedDurationArray.slice(0, 6));
+
+//     console.log(resultArray);
+
+//     return resultArray;
+//   };
+
+
 
 
 export { M };
