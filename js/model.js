@@ -119,6 +119,7 @@ M.getCountsByWeekWithCourse = function (course, value) {
         res[i] = 0;
     }
 
+
     let allCalendars = M.getEventsWithCourse(course);
 
     let eventByGroup = [];
