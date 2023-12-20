@@ -151,44 +151,8 @@ M.getCountsByWeekWithCourse = function (course, value) {
 
     const resultArray = M.FormatResults(res);
 
-
-    //console.log(resultArray);
-
     return resultArray;
 };
-
-
-
-
-
-
-
-
-// M.getCountsByWeek = function () {
-//     let allCalendars = M.getConcatEvents();
-
-//     const durationByWeek = allCalendars.reduce((acc, event) => {
-//       const weekNumber = new Date(event.start).getWeek();
-//       const startDateTime = new Date(event.start).getTime();
-//       const endDateTime = new Date(event.end).getTime();
-//       const durationInHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
-
-//       acc[weekNumber] = (acc[weekNumber] || 0) + durationInHours;
-//       return acc;
-//     }, {});
-
-//     const sortedDurationArray = Object.entries(durationByWeek)
-//       .map(([weekNumber, duration]) => ({ weekNumber: parseInt(weekNumber), duration }))
-//       .sort((a, b) => a.weekNumber - b.weekNumber)
-//       .map(entry => entry.duration);
-
-//     // Utilisez slice(6) pour commencer à la 7e valeur du tableau
-//     const resultArray = sortedDurationArray.slice(6).concat(sortedDurationArray.slice(0, 6));
-
-//     console.log(resultArray);
-
-//     return resultArray;
-//   };
 
 
 
