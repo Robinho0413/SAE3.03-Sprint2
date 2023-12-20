@@ -44,12 +44,16 @@ M.getConcatEvents = function () {
 }
 
 
+
+
+
 // Itération 2 : Récupère tout les events ou le cours(course) est à l'intérieur.
 M.getEventsWithCourse = function (course) {
     let allEv = M.getConcatEvents();
 
     return allEv.filter( ev => ev.type==course );
 };
+
 
 
 Date.prototype.getWeek = function() {
@@ -69,7 +73,7 @@ Date.prototype.getWeek = function() {
 // Fonction Initial qui formate le tableau d'objet.
 M.FormatResults = function(result) { 
     let res2023 = result.slice(36);
-    let res2024 = result.slice(1, 24);
+    let res2024 = result.slice(1, 8);
     return [...res2023, ...res2024];
 }
 
@@ -98,25 +102,23 @@ M.getCountsByWeek = function () {
 
 
 // Fonction Itération 2 
-M.getCountsByWeekWithCourse = function () {
+M.getCountsByWeekWithCourse = function (course) {
     let res = new Array(53);
     for(let i=0; i<res.length; i++){
         res[i]=0;
     }
 
-    let allCalendars = M.getEventsWithCourse('CM');
+    let allCalendars = M.getEventsWithCourse(course);
+  
 
     for(let cm of allCalendars ){
         let nw = cm.start.getWeek();
-
-        let duration = (cm.end - cm.start) / 3600000;
-        console.log(duration)
+        let duration = (cm.end - cm.start) / (1000 * 60 * 60);;
         res[nw] += duration;
     }
-
+    
+    
     const resultArray = M.FormatResults(res);
-
-    console.log(resultArray);
 
     return resultArray;
 };

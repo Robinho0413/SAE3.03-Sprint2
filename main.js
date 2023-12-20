@@ -17,31 +17,33 @@ C.init = function(){
 
 let result = V.generateWeekNumbers()
 
-let courseEvents = M.getCountsByWeekWithCourse();
+let courseEvents = M.getCountsByWeek();
 console.log(courseEvents);
+
+let courseEventsCM = M.getCountsByWeekWithCourse('CM');
+
+
+let courseEventsTD = M.getCountsByWeekWithCourse('TD');
+
+
+let courseEventsTP = M.getCountsByWeekWithCourse('TP');
+
 
 // affichage des groupes
 C.handler_changeOnGroup = function(ev){
   let allEvents = M.getConcatEvents();
-
+  
   let eventsByGroup = [];
-
+  
   for(let event of allEvents){
-    if(event.groups.includes(ev.target.value)){
-      eventsByGroup.push(event);
-    }
+      if(event.groups.includes(ev.target.value)){
+          eventsByGroup.push(event);
+      }
   }
-
-  //parcourir eventsByGroup
-
-
-
+  
+    
   return(eventsByGroup)
 }
-
-
-
-
 
 
 
@@ -75,13 +77,13 @@ chart.render();
 var options = {
   series: [{
   name: 'CM',
-  data: courseEvents
+  data: courseEventsCM
 }, {
   name: 'TD',
-  data: [53, 32, 33, 52, 13, 43, 32]
+  data: courseEventsTD
 }, {
   name: 'TP',
-  data: [44, 55, 41, 37, 22, 43, 21]
+  data: courseEventsTP
 },],
   chart: {
   type: 'bar',
