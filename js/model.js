@@ -46,6 +46,8 @@ M.getConcatEvents = function () {
 }
 
 
+
+
 // Itération 2 : Récupère tout les events ou le cours(course) est à l'intérieur.
 M.getEventsWithCourse = function (course) {
     let allEv = M.getConcatEvents();
@@ -88,7 +90,7 @@ M.getCountsByWeek = function () {
     }
 
     let allCalendars = M.getConcatEvents();
-    console.log(allCalendars)
+
     for (let cm of allCalendars) {
         let nw = cm.start.getWeek();
         let duration = (cm.end - cm.start) / (1000 * 60 * 60);
@@ -150,77 +152,112 @@ M.getCountsByWeekWithCourse = function (course, value) {
     return resultArray;
 };
 
-M.getCountsByWeekSemester = function (course, value) {
-    
+// M.getCountsByWeekSemester = function (course, value) {
+//     let allCalendars = M.getEventsWithCourse(course);
+//     let CalS1R = [];
+//     let Total = 0; // Déplacer la déclaration de Total à l'extérieur des blocs if/else
+
+//     for (let ev of allCalendars) {
+//         if (ev.title.includes('R1') || ev.title.includes('R3') || ev.title.includes('R5')) {
+//             CalS1R.push(ev);
+//         }
+//     }
+
+//     if (value == '0') {
+//         for (let cm of CalS1R) {
+//             let duration = (cm.end - cm.start) / (1000 * 60 * 60);
+//             Total += duration;
+//             console.log(Total);
+//         }
+//     } else {
+//         let eventByGroup = [];
+//         for (let cal of CalS1R) {
+//             if (cal.groups.includes(value)) {
+//                 eventByGroup.push(cal);
+//             }
+//         }
+//         for (let cm of eventByGroup) {
+//             let duration = (cm.end - cm.start) / (1000 * 60 * 60);
+//             Total += duration;
+//             console.log(Total);
+//         }
+//     }
+
+//     console.log(Total);
+//     const resultArray = M.FormatResults(res);
+//     console.log(resultArray);
+
+//     return resultArray;
+// };
+
+
+M.getCountsByWeekSemester = function (course, value, semester) {
     let allCalendars = M.getEventsWithCourse(course);
+    let CalS1R = [];
+    let Total = 0; 
+    
 
-    let CalS1R = []
-
-
-    let total = 0;
-
-    for (let ev of allCalendars) {
-        
-        total += (ev.end - ev.start) / (1000 * 60 * 60);
-        
-        if (ev.title.includes('R1') || ev.title.includes('R3') || ev.title.includes('R5')) {
-            CalS1R.push(ev)
-            console.log(CalS1R)
-        }
-        
-        if (value !== '0') {
-        let eventByGroup = [];
-            for (let cal of CalS1R) {
-                if (cal.groups.includes(value)) {
-                    eventByGroup.push(cal);
-                }
-            }
-            let Total = 0;
-            for (let cm of eventByGroup) {
-                
-                let duration = (cm.end - cm.start) / (1000 * 60 * 60);
-                Total += duration;
-                
-                
-            }
-
-        }
-
-        else {
-            for (let cm of CalS1R) {
-                
-                let duration = (cm.end - cm.start) / (1000 * 60 * 60);
-                Total += duration;
+    if (semester == 'S1') {
+        for (let ev of allCalendars) {
+            if (ev.title.includes('R1') || ev.title.includes('R3') || ev.title.includes('R5')) {
+                CalS1R.push(ev);
             }
         }
     }
-    console.log(total)
 
-    console.log(res)
-    const resultArray = M.FormatResults(res);
+    else if (semester == 'S2'){
+        for (let ev of allCalendars) {
+            if (ev.title.includes('R2') || ev.title.includes('R4') || ev.title.includes('R6')) {
+                CalS1R.push(ev);
+            }
+        }
+    }
+
+    else if (semester == 'S1S'){
+        for (let ev of allCalendars) {
+            if (ev.title.includes('SAÉ 1') || ev.title.includes('SAÉ 3') || ev.title.includes('SAÉ 5') || ev.title.includes('SAE 1') || ev.title.includes('SAE 3') || ev.title.includes('SAE 5')) {
+                CalS1R.push(ev);
+            }
+        }
+    }
+
+    else if (semester == 'S2S'){
+        for (let ev of allCalendars) {
+            if (ev.title.includes('SAÉ 2') || ev.title.includes('SAÉ 4') || ev.title.includes('SAÉ 6') || ev.title.includes('SAE 2') || ev.title.includes('SAE 4') || ev.title.includes('SAE 6')) {
+                CalS1R.push(ev);
+            }
+        }
+    }
 
 
-    console.log(resultArray);
+    if (value == '0') {
+        for (let cm of CalS1R) {
+            let duration = (cm.end - cm.start) / (1000 * 60 * 60);
+            Total += duration;
+        }
+    } else {
+        let eventByGroup = [];
+        for (let cal of CalS1R) {
+            if (cal.groups.includes(value)) {
+                eventByGroup.push(cal);
+            }
+        }
+        for (let cm of eventByGroup) {
+            let duration = (cm.end - cm.start) / (1000 * 60 * 60);
+            Total += duration;
+          
+        }
+    }
 
-    return resultArray;
+   
+    return Total;
 };
 
 
 
 
 
-// else if (ev.title.includes('R2') || ev.title.includes('R4') || ev.title.includes('R6')){
-//     CalS2R.push(ev)
-// }
 
-// else if (ev.title.includes('SAÉ 1') || ev.title.includes('SAÉ 3') || ev.title.includes('SAÉ 5')){
-//     CalS1S.push(ev)
-// }
-
-// else if (ev.title.includes('SAÉ 2') || ev.title.includes('SAÉ 4') || ev.title.includes('SAÉ 6')){
-//     CalS2S.push(ev)
-
-// }
 
 
 

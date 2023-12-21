@@ -3,7 +3,7 @@ import { M } from "./js/model.js";
 import { V } from "./js/view.js";
 
 let C = {};
-let result; 
+let result;
 
 await M.init();
 
@@ -14,6 +14,9 @@ C.init = function () {
   let group = document.querySelector('#select-groups');
   group.addEventListener('change', C.handler_changeOnGroup);
 
+  let it3 = document.querySelector('#select-it3');
+  it3.addEventListener('change', C.handler_changeOnGroup3);
+
 }
 
 // Itération 2
@@ -22,13 +25,13 @@ M.CreateStackedBar = function (cm, td, tp) {
   let tdcopy = []
   let tpcopy = []
 
-  for(let elmt of cm){
+  for (let elmt of cm) {
     cmcopy.push(elmt)
   }
-  for(let elmt of td){
+  for (let elmt of td) {
     tdcopy.push(elmt)
   }
-  for(let elmt of tp){
+  for (let elmt of tp) {
     tpcopy.push(elmt)
   }
   var options2 = {
@@ -106,10 +109,10 @@ M.CreateStackedBar = function (cm, td, tp) {
 
 }
 
- 
+
 
 C.handler_changeOnGroup = function (ev) {
-  
+
 
   if (ev.target.value == 'all') {
     let data1 = M.getCountsByWeekWithCourse('CM', "0")
@@ -171,56 +174,200 @@ chart.render();
 
 
 // Iteration 3 : Resssources et SAE
+V.CreateRadar = function(S1R, S1S, S2R, S2S) {
 
-var options3 = {
-  series: [{
-    name: 'S1 - Ressources',
-    data: [80, 50, 30, 40],
-  }, {
-    name: 'S1 - SAE',
-    data: [20, 30, 40, 90],
-  }, {
-    name: 'S2 - Ressources',
-    data: [44, 76, 78, 13],
-  }, {
-    name: 'S2 - SAE',
-    data: [64, 16, 38, 63],
+  var options3 = {
+    series: [{
+    name: 'Semestre 1 - Ressources',
+    data: S1R,
+  }, 
+  {
+    name: 'Semestre 1 - SAE',
+    data: S1S,
+  }, 
+  {
+    name: 'Semestre 2 - Ressources',
+    data: S2R,
+  },{
+    name: 'Semestre 2 - SAE',
+    data: S2S,
   }],
-  chart: {
-    height: 350,
+    chart: {
+    height: 650,
     type: 'radar',
-    dropShadow: {
-      enabled: true,
-      blur: 1,
-      left: 1,
-      top: 1
+  },
+  dataLabels: {
+    enabled: true
+  },
+  plotOptions: {
+    radar: {
+      size: 300,
+      polygons: {
+        strokeColors: '#e9e9e9',
+        fill: {
+          colors: ['#f8f8f8', '#fff']
+        }
+      }
     }
   },
   title: {
-    text: 'Radar Chart - Multi Series'
-  },
-  stroke: {
-    width: 2
-  },
-  fill: {
-    opacity: 0.1
+    text: 'Radar with Polygon Fill'
   },
   markers: {
-    size: 0
+    size: 4,
+    colors: ['#fff'],
+    strokeColor: '#FF4560',
+    strokeWidth: 2,
+  },
+  tooltip: {
+    y: {
+      formatter: function(val) {
+        return val
+      }
+    }
   },
   xaxis: {
-    categories: ['CM', 'TD', 'TP', 'Autres']
+    categories: ['CM', 'TD', 'TP']
+  },
+  yaxis: {
+    tickAmount: 7,
+    labels: {
+      formatter: function(val, i) {
+        if (i % 2 === 0) {
+          return val
+        } else {
+          return ''
+        }
+      }
+    }
   }
-};
-
-var chart = new ApexCharts(document.querySelector("#chart3"), options3);
-chart.render();
 
 
+  };
 
-M.getCountsByWeekSemester('CM', 'BUT2-G3') 
+ 
+
+
+  // var options3 = {
+  //   series: [{
+  //     name: 'S1 - Ressources',
+  //     data: S1R,
+  //   }, {
+  //     name: 'S1 - SAE',
+  //     data: S1S,
+  //   }, {
+  //     name: 'S2 - Ressources',
+  //     data: S2R,
+  //   }, {
+  //     name: 'S2 - SAE',
+  //     data: S2S,
+  //   }],
+  //   chart: {
+  //     height: 650,
+  //     type: 'radar',
+  //     dataLabels: {
+  //       enabled: true
+  //     },
+  //     dropShadow: {
+  //       enabled: true,
+  //       blur: 1,
+  //       left: 1,
+  //       top: 1
+  //     }
+  //   },
+  //   title: {
+  //     text: 'Radar Chart - Multi Series'
+  //   },
+  //   markers: {
+  //     size: 4,
+  //     colors: ['#fff'],
+  //     strokeColor: '#FF4560',
+  //     strokeWidth: 2,
+  //   },
+  //   stroke: {
+  //     width: 2
+  //   },
+  //   fill: {
+  //     opacity: 0.1
+  //   },
+  //   markers: {
+  //     size: 0
+  //   },
+  //   xaxis: {
+  //     categories: ['CM', 'TD', 'TP']
+  //   }
+  // };
+
+  if(V.chart3){
+    V.chart3.destroy();
+  }
+
+  V.chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
+  V.chart3.render();
+
+  window.scrollTo(0, document.querySelector("#chart3").offsetTop)
+}
+
+
+
+
+M.getCountsByWeekSemester('TP', '0', 'S1')
+
+
+
+C.handler_changeOnGroup3 = function (ev) {
+  let TABS1R = []
+  let TABS2R = []
+  let TABS1S = []
+  let TABS2S = []
+
+
+  if (ev.target.value == 'all') {
+    TABS1R.push(M.getCountsByWeekSemester('CM', '0', 'S1'))
+    TABS1R.push(M.getCountsByWeekSemester('TD', '0', 'S1'))
+    TABS1R.push(M.getCountsByWeekSemester('TP', '0', 'S1'))
+
+    TABS2R.push(M.getCountsByWeekSemester('CM', '0', 'S2'))
+    TABS2R.push(M.getCountsByWeekSemester('TD', '0', 'S2'))
+    TABS2R.push(M.getCountsByWeekSemester('TP', '0', 'S2'))
+
+    TABS1S.push(M.getCountsByWeekSemester('CM', '0', 'S1S'))
+    TABS1S.push(M.getCountsByWeekSemester('TD', '0', 'S1S'))
+    TABS1S.push(M.getCountsByWeekSemester('TP', '0', 'S1S'))
+
+    TABS2S.push(M.getCountsByWeekSemester('CM', '0', 'S1S'))
+    TABS2S.push(M.getCountsByWeekSemester('TD', '0', 'S1S'))
+    TABS2S.push(M.getCountsByWeekSemester('TP', '0', 'S1S'))
+    
+    V.CreateRadar(TABS1R, TABS2R, TABS1S, TABS2S)
+  }
+  else {
+    TABS1R.push(M.getCountsByWeekSemester('CM', ev.target.value, 'S1'))
+    TABS1R.push(M.getCountsByWeekSemester('TD', ev.target.value, 'S1'))
+    TABS1R.push(M.getCountsByWeekSemester('TP', ev.target.value, 'S1'))
+
+    TABS2R.push(M.getCountsByWeekSemester('CM', ev.target.value, 'S2'))
+    TABS2R.push(M.getCountsByWeekSemester('TD', ev.target.value, 'S2'))
+    TABS2R.push(M.getCountsByWeekSemester('TP', ev.target.value, 'S2'))
+
+    TABS1S.push(M.getCountsByWeekSemester('CM', ev.target.value, 'S1S'))
+    TABS1S.push(M.getCountsByWeekSemester('TD', ev.target.value, 'S1S'))
+    TABS1S.push(M.getCountsByWeekSemester('TP', ev.target.value, 'S1S'))
+
+    TABS2S.push(M.getCountsByWeekSemester('CM', ev.target.value, 'S1S'))
+    TABS2S.push(M.getCountsByWeekSemester('TD', ev.target.value, 'S1S'))
+    TABS2S.push(M.getCountsByWeekSemester('TP', ev.target.value, 'S1S'))
+    
+    V.CreateRadar(TABS1R, TABS2R, TABS1S, TABS2S)
+  }
+
+
+}
+
 
 
 C.init();
+
+
 
 //test

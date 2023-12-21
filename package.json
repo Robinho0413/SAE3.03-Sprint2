@@ -12,6 +12,7 @@
     "vite": "^5.0.10"
   },
   "dependencies": {
-    "apexcharts": "^3.45.0"
+    "apexcharts": "^3.45.0",
+    "ical": "^0.8.0"
   }
 }
