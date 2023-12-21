@@ -1,57 +1,81 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sprint 2</title>
-  </head>
-  <body>
-    <div id="chart"></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="./style.css" rel="stylesheet" />
+  <title>Sprint 2</title>
+</head>
+
+<body>
+
+  <h1 id="windowtp" class="title">Tableau de Bord des Horaires de Cours MMI</h1>
+
+  <div class="container1">
+    <div name="Itération 1">
+      <h2 class="it__title">Nombre total d'heures de cours par semaine du département MMI (2023-2024)</h2>
+      <div id="chart"></div>
+    </div>
+    <div name="Itération 3">
+      <h2 class="it__title">Volume horaire par semestre.</h2>
+      <select class="nav__groups" name="groups" id="select-it3">
+        <option id="select-group-all" value="all">ALL</option>
+  
+        <option id="select-group-mmi1" value="BUT1-G1">BUT1-G1</option>
+        <option id="select-group-mmi1" value="BUT1-G21">BUT1-G21</option>
+        <option id="select-group-mmi1" value="BUT1-G22">BUT1-G22</option>
+        <option id="select-group-mmi1" value="BUT1-G3">BUT1-G3</option>
+  
+        <option id="select-group-mmi2" value="BUT2-G1">BUT2-G1</option>
+        <option id="select-group-mmi2" value="BUT2-G21">BUT2-G21</option>
+        <option id="select-group-mmi2" value="BUT2-G22">BUT2-G22</option>
+        <option id="select-group-mmi2" value="BUT2-G3">BUT2-G3</option>
+  
+        <option id="select-group-mmi3" value="BUT3-G1">BUT3-G1</option>
+        <option id="select-group-mmi3" value="BUT3-G21">BUT3-G21</option>
+        <option id="select-group-mmi3" value="BUT3-G22">BUT3-G22</option>
+        <option id="select-group-mmi3" value="BUT3-G3">BUT3-G3</option>
+      </select>
+  
+      <div id="chart3"></div>
+  
+    </div>
+  </div>
+
+    <div name="Itération 2">
+      <h2>Classification du volume horaire des Cours et filtrage par groupes de TP d'Étudiants.</h2>
+      <select class="nav__groups" name="groups" id="select-groups">
+        <option id="select-group-all" value="all">ALL</option>
+  
+        <option id="select-group-mmi1" value="BUT1-G1">BUT1-G1</option>
+        <option id="select-group-mmi1" value="BUT1-G21">BUT1-G21</option>
+        <option id="select-group-mmi1" value="BUT1-G22">BUT1-G22</option>
+        <option id="select-group-mmi1" value="BUT1-G3">BUT1-G3</option>
+  
+        <option id="select-group-mmi2" value="BUT2-G1">BUT2-G1</option>
+        <option id="select-group-mmi2" value="BUT2-G21">BUT2-G21</option>
+        <option id="select-group-mmi2" value="BUT2-G22">BUT2-G22</option>
+        <option id="select-group-mmi2" value="BUT2-G3">BUT2-G3</option>
+  
+        <option id="select-group-mmi3" value="BUT3-G1">BUT3-G1</option>
+        <option id="select-group-mmi3" value="BUT3-G21">BUT3-G21</option>
+        <option id="select-group-mmi3" value="BUT3-G22">BUT3-G22</option>
+        <option id="select-group-mmi3" value="BUT3-G3">BUT3-G3</option>
+      </select>
+  
+      <div id="chart2"></div>
+  
+    </div>
+  
+
+  
 
 
-    <!-- choix des groupes -->
-    <select class="nav__groups" name="groups" id="select-groups">
-      <option id="select-group-all" value="all">ALL</option>
+  <script type="module" src="/main.js"></script>
 
-      <option id="select-group-mmi1" value="BUT1-G1">BUT1-G1</option>
-      <option id="select-group-mmi1" value="BUT1-G21">BUT1-G21</option>
-      <option id="select-group-mmi1" value="BUT1-G22">BUT1-G22</option>
-      <option id="select-group-mmi1" value="BUT1-G3">BUT1-G3</option>
 
-      <option id="select-group-mmi2" value="BUT2-G1">BUT2-G1</option>
-      <option id="select-group-mmi2" value="BUT2-G21">BUT2-G21</option>
-      <option id="select-group-mmi2" value="BUT2-G22">BUT2-G22</option>
-      <option id="select-group-mmi2" value="BUT2-G3">BUT2-G3</option>
+</body>
 
-      <option id="select-group-mmi3" value="BUT3-G1">BUT3-G1</option>
-      <option id="select-group-mmi3" value="BUT3-G21">BUT3-G21</option>
-      <option id="select-group-mmi3" value="BUT3-G22">BUT3-G22</option>
-      <option id="select-group-mmi3" value="BUT3-G3">BUT3-G3</option>
-    </select>
-
-    <div id="chart2"></div>
-
-    <select class="nav__groups" name="groups" id="select-it3">
-      <option id="select-group-all" value="all">ALL</option>
-
-      <option id="select-group-mmi1" value="BUT1-G1">BUT1-G1</option>
-      <option id="select-group-mmi1" value="BUT1-G21">BUT1-G21</option>
-      <option id="select-group-mmi1" value="BUT1-G22">BUT1-G22</option>
-      <option id="select-group-mmi1" value="BUT1-G3">BUT1-G3</option>
-
-      <option id="select-group-mmi2" value="BUT2-G1">BUT2-G1</option>
-      <option id="select-group-mmi2" value="BUT2-G21">BUT2-G21</option>
-      <option id="select-group-mmi2" value="BUT2-G22">BUT2-G22</option>
-      <option id="select-group-mmi2" value="BUT2-G3">BUT2-G3</option>
-
-      <option id="select-group-mmi3" value="BUT3-G1">BUT3-G1</option>
-      <option id="select-group-mmi3" value="BUT3-G21">BUT3-G21</option>
-      <option id="select-group-mmi3" value="BUT3-G22">BUT3-G22</option>
-      <option id="select-group-mmi3" value="BUT3-G3">BUT3-G3</option>
-    </select>
-
-    <div id="chart3"></div>
-    <script type="module" src="/main.js"></script> test
-  </body>
 </html>
