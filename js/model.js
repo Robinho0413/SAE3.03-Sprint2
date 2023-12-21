@@ -46,6 +46,7 @@ M.getConcatEvents = function () {
 }
 
 
+
 // Itération 2 : Récupère tout les events ou le cours(course) est à l'intérieur.
 M.getEventsWithCourse = function (course) {
     let allEv = M.getConcatEvents();
@@ -53,6 +54,7 @@ M.getEventsWithCourse = function (course) {
     return allEv.filter(ev => ev.type == course);
 
 };
+
 
 M.getEventsWithGroup = function (group) {
     let allEv = M.getConcatEvents();
@@ -153,6 +155,82 @@ M.getCountsByWeekWithCourse = function (course, value) {
 
     return resultArray;
 };
+
+
+
+M.getClosingHoursByDay = function(group, day) {
+    // Filtrage par groupe
+    let allEvByGroup = M.getEventsWithGroup(group);
+
+    // Filtrage par jour
+    allEvByGroup = allEvByGroup.filter(ev => ev.end.toString().includes(day));
+
+    
+    // Objet pour regrouper les cours par date
+    let coursParDate = {};
+
+    for(let evByGroup of allEvByGroup){
+        let dateKey = evByGroup.end.toISOString().split('T')[0];
+
+
+        if (!coursParDate[dateKey]) {
+            coursParDate[dateKey] = [];
+        }
+
+        coursParDate[dateKey].push(evByGroup);
+    }
+
+    // création d'un tableau pour les heures les plus tardives
+    let allLastCourse = [];
+
+    for(let date in coursParDate){
+
+        let lastCourse = coursParDate[date][coursParDate[date].length - 1]
+        allLastCourse.push(lastCourse)
+
+
+    }
+
+
+    // calcul moyenne
+    let nbEv = 0
+    let totalHeures = 0
+
+    for(let heures of allLastCourse){
+        totalHeures = totalHeures + heures.end.getHours();
+
+        nbEv = nbEv + 1;
+    }
+
+
+    let average = totalHeures / nbEv;
+    let roundAverage = average.toFixed(1);
+    return roundAverage
+}
+
+M.getClosingHoursByAllDays = function(group){
+    let days = [
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri'
+    ]
+
+    let dayCourses = []
+
+    for(let day of days){
+        let dayCourse = M.getClosingHoursByDay(group, day)
+        dayCourses.push(dayCourse)
+    }
+
+    return dayCourses
+
+}
+
+
+
+
 
 
 
