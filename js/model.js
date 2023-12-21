@@ -180,7 +180,7 @@ M.getClosingHoursByDay = function(group, day) {
         coursParDate[dateKey].push(evByGroup);
     }
 
-    // création d'un tableau pour les heures les plus tardives
+    // création d'un tableau regroupant les cours se finissant le plus tard pour chaque jour
     let allLastCourse = [];
 
     for(let date in coursParDate){
