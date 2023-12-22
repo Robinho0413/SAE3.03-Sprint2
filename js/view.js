@@ -320,7 +320,7 @@ V.CreateRadar = function (S1R, S1S, S2R, S2S) {
     V.chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
     V.chart3.render();
 
-    window.scrollTo(0, document.querySelector("#chart3").offsetTop)
+    window.scrollTo(0, 0)
 }
 
 
