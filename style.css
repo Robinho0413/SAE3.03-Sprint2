@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400&family=Lexend&display=swap');
+body {
+    margin: 2rem;
+    color: #343E59;
+    font-family: Kanit;
+    background-color:#EFF4F7;
+    
+}
+
+.title {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.it__title {
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.container1 {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    
+    
+}
+
+.bloc {
+    background-color: #FFF;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    box-shadow: 4px 7px 19px 5px rgba(0,0,0,0.28) ;
+}
+
+.container2 {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.apexcharts-legend-text {
+    fill: #ff0000; /* Choisir la couleur que vous souhaitez */
+}
+
+.it3__title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.it2__title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 800px;
+
+}
+
+.nav__groups {
+    height: 2rem;
+    border-radius: .75rem;
+    padding: 0.5rem;
+
+}
+
+.credit {
+    text-align: center;
+}
