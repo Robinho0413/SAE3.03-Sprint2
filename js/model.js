@@ -56,6 +56,13 @@ M.getEventsWithCourse = function (course) {
 
 };
 
+M.getEventsWithGroup = function (group) {
+    let allEv = M.getConcatEvents();
+
+    return allEv.filter(ev => ev.groups.includes(group));
+
+};
+
 
 
 Date.prototype.getWeek = function () {
@@ -72,7 +79,6 @@ Date.prototype.getWeek = function () {
 
 
 
-// Fonction Initial qui calcule la durée des cours par numéro de semaine.
 
 // Fonction Initial qui formate le tableau d'objet.
 M.FormatResults = function (result) {
@@ -152,45 +158,8 @@ M.getCountsByWeekWithCourse = function (course, value) {
     return resultArray;
 };
 
-// M.getCountsByWeekSemester = function (course, value) {
-//     let allCalendars = M.getEventsWithCourse(course);
-//     let CalS1R = [];
-//     let Total = 0; // Déplacer la déclaration de Total à l'extérieur des blocs if/else
 
-//     for (let ev of allCalendars) {
-//         if (ev.title.includes('R1') || ev.title.includes('R3') || ev.title.includes('R5')) {
-//             CalS1R.push(ev);
-//         }
-//     }
-
-//     if (value == '0') {
-//         for (let cm of CalS1R) {
-//             let duration = (cm.end - cm.start) / (1000 * 60 * 60);
-//             Total += duration;
-//             console.log(Total);
-//         }
-//     } else {
-//         let eventByGroup = [];
-//         for (let cal of CalS1R) {
-//             if (cal.groups.includes(value)) {
-//                 eventByGroup.push(cal);
-//             }
-//         }
-//         for (let cm of eventByGroup) {
-//             let duration = (cm.end - cm.start) / (1000 * 60 * 60);
-//             Total += duration;
-//             console.log(Total);
-//         }
-//     }
-
-//     console.log(Total);
-//     const resultArray = M.FormatResults(res);
-//     console.log(resultArray);
-
-//     return resultArray;
-// };
-
-
+// Fonction Itération 3 
 M.getCountsByWeekSemester = function (course, value, semester) {
     let allCalendars = M.getEventsWithCourse(course);
     let CalS1R = [];
@@ -253,8 +222,77 @@ M.getCountsByWeekSemester = function (course, value, semester) {
     return Total;
 };
 
+// Fonction Itération 4
+M.getClosingHoursByDay = function(group, day) {
+    // Filtrage par groupe
+    let allEvByGroup = M.getEventsWithGroup(group);
+
+    // Filtrage par jour
+    allEvByGroup = allEvByGroup.filter(ev => ev.end.toString().includes(day));
+
+    
+    // Objet pour regrouper les cours par date
+    let coursParDate = {};
+
+    for(let evByGroup of allEvByGroup){
+        let dateKey = evByGroup.end.toISOString().split('T')[0];
 
 
+        if (!coursParDate[dateKey]) {
+            coursParDate[dateKey] = [];
+        }
+
+        coursParDate[dateKey].push(evByGroup);
+    }
+
+    // création d'un tableau regroupant les cours se finissant le plus tard pour chaque jour
+    let allLastCourse = [];
+
+    for(let date in coursParDate){
+
+        let lastCourse = coursParDate[date][coursParDate[date].length - 1]
+        allLastCourse.push(lastCourse)
+
+
+    }
+
+
+    // calcul moyenne
+    let nbEv = 0
+    let totalHeures = 0
+
+    for(let heures of allLastCourse){
+        totalHeures = totalHeures + heures.end.getHours();
+
+        nbEv = nbEv + 1;
+    }
+
+
+    let average = totalHeures / nbEv;
+    let roundAverage = average.toFixed(1);
+    return roundAverage
+}
+
+// Fonction Itération 4
+M.getClosingHoursByAllDays = function(group){
+    let days = [
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri'
+    ]
+
+    let dayCourses = []
+
+    for(let day of days){
+        let dayCourse = M.getClosingHoursByDay(group, day)
+        dayCourses.push(dayCourse)
+    }
+
+    return dayCourses
+
+}
 
 
 

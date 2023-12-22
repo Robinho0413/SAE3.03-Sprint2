@@ -11,66 +11,88 @@
 
 <body>
 
-  <h1 id="windowtp" class="title">Tableau de Bord des Horaires de Cours MMI</h1>
+  <h1 id="windowtp" class="title">Tableau de Bord des Horaires de Cours MMI (2023-2024)</h1>
+  <br>
+  </br>
+  <section class="container">
+    <div class="container1">
+      <div class="bloc">
+        <div name="Itération 1">
+          <h2 class="it__title">Nombre total d'heures de cours par semaine du département MMI </h2>
+          <div id="chart"></div>
+        </div>
+      </div>
 
-  <div class="container1">
-    <div name="Itération 1">
-      <h2 class="it__title">Nombre total d'heures de cours par semaine du département MMI (2023-2024)</h2>
-      <div id="chart"></div>
-    </div>
-    <div name="Itération 3">
-      <h2 class="it__title">Volume horaire par semestre.</h2>
-      <select class="nav__groups" name="groups" id="select-it3">
-        <option id="select-group-all" value="all">ALL</option>
-  
-        <option id="select-group-mmi1" value="BUT1-G1">BUT1-G1</option>
-        <option id="select-group-mmi1" value="BUT1-G21">BUT1-G21</option>
-        <option id="select-group-mmi1" value="BUT1-G22">BUT1-G22</option>
-        <option id="select-group-mmi1" value="BUT1-G3">BUT1-G3</option>
-  
-        <option id="select-group-mmi2" value="BUT2-G1">BUT2-G1</option>
-        <option id="select-group-mmi2" value="BUT2-G21">BUT2-G21</option>
-        <option id="select-group-mmi2" value="BUT2-G22">BUT2-G22</option>
-        <option id="select-group-mmi2" value="BUT2-G3">BUT2-G3</option>
-  
-        <option id="select-group-mmi3" value="BUT3-G1">BUT3-G1</option>
-        <option id="select-group-mmi3" value="BUT3-G21">BUT3-G21</option>
-        <option id="select-group-mmi3" value="BUT3-G22">BUT3-G22</option>
-        <option id="select-group-mmi3" value="BUT3-G3">BUT3-G3</option>
-      </select>
-  
-      <div id="chart3"></div>
-  
-    </div>
-  </div>
 
-    <div name="Itération 2">
-      <h2>Classification du volume horaire des Cours et filtrage par groupes de TP d'Étudiants.</h2>
-      <select class="nav__groups" name="groups" id="select-groups">
-        <option id="select-group-all" value="all">ALL</option>
-  
-        <option id="select-group-mmi1" value="BUT1-G1">BUT1-G1</option>
-        <option id="select-group-mmi1" value="BUT1-G21">BUT1-G21</option>
-        <option id="select-group-mmi1" value="BUT1-G22">BUT1-G22</option>
-        <option id="select-group-mmi1" value="BUT1-G3">BUT1-G3</option>
-  
-        <option id="select-group-mmi2" value="BUT2-G1">BUT2-G1</option>
-        <option id="select-group-mmi2" value="BUT2-G21">BUT2-G21</option>
-        <option id="select-group-mmi2" value="BUT2-G22">BUT2-G22</option>
-        <option id="select-group-mmi2" value="BUT2-G3">BUT2-G3</option>
-  
-        <option id="select-group-mmi3" value="BUT3-G1">BUT3-G1</option>
-        <option id="select-group-mmi3" value="BUT3-G21">BUT3-G21</option>
-        <option id="select-group-mmi3" value="BUT3-G22">BUT3-G22</option>
-        <option id="select-group-mmi3" value="BUT3-G3">BUT3-G3</option>
-      </select>
-  
-      <div id="chart2"></div>
-  
-    </div>
-  
+      <div class="bloc" name="Itération 3">
+        <div class="it3__title">
+          <h2 class="it__title">Volume horaire par semestre.</h2>
+          <select class="nav__groups" name="groups" id="select-it3">
+            <option id="select-group-all" value="all">ALL</option>
 
-  
+            <option id="select-group-mmi1" value="BUT1-G1">BUT1-G1</option>
+            <option id="select-group-mmi1" value="BUT1-G21">BUT1-G21</option>
+            <option id="select-group-mmi1" value="BUT1-G22">BUT1-G22</option>
+            <option id="select-group-mmi1" value="BUT1-G3">BUT1-G3</option>
+
+            <option id="select-group-mmi2" value="BUT2-G1">BUT2-G1</option>
+            <option id="select-group-mmi2" value="BUT2-G21">BUT2-G21</option>
+            <option id="select-group-mmi2" value="BUT2-G22">BUT2-G22</option>
+            <option id="select-group-mmi2" value="BUT2-G3">BUT2-G3</option>
+
+            <option id="select-group-mmi3" value="BUT3-G1">BUT3-G1</option>
+            <option id="select-group-mmi3" value="BUT3-G21">BUT3-G21</option>
+            <option id="select-group-mmi3" value="BUT3-G22">BUT3-G22</option>
+            <option id="select-group-mmi3" value="BUT3-G3">BUT3-G3</option>
+          </select>
+        </div>
+
+
+        <div id="chart3"></div>
+
+      </div>
+    </div>
+
+    <div class="container2">
+      <div class="bloc" name="Itération 2">
+        <div class="it2__title">
+          <h2 class="it__title">Classification du volume horaire des Cours et filtrage par groupes de TP d'Étudiants.
+          </h2>
+          <select class="nav__groups" name="groups" id="select-groups">
+            <option id="select-group-all" value="all">ALL</option>
+            <option id="select-group-mmi1" value="BUT1-G1">BUT1-G1</option>
+            <option id="select-group-mmi1" value="BUT1-G21">BUT1-G21</option>
+            <option id="select-group-mmi1" value="BUT1-G22">BUT1-G22</option>
+            <option id="select-group-mmi1" value="BUT1-G3">BUT1-G3</option>
+
+            <option id="select-group-mmi2" value="BUT2-G1">BUT2-G1</option>
+            <option id="select-group-mmi2" value="BUT2-G21">BUT2-G21</option>
+            <option id="select-group-mmi2" value="BUT2-G22">BUT2-G22</option>
+            <option id="select-group-mmi2" value="BUT2-G3">BUT2-G3</option>
+
+            <option id="select-group-mmi3" value="BUT3-G1">BUT3-G1</option>
+            <option id="select-group-mmi3" value="BUT3-G21">BUT3-G21</option>
+            <option id="select-group-mmi3" value="BUT3-G22">BUT3-G22</option>
+            <option id="select-group-mmi3" value="BUT3-G3">BUT3-G3</option>
+          </select>
+        </div>
+
+        <div id="chart2"></div>
+
+      </div>
+      <div class="bloc">
+        <h2 class="it__title">Heures moyennes de fin des cours</h2>
+        <div class="chart4" id="chart4"></div>
+      </div>
+    </div>
+  </section>
+  <br>
+  </br>
+  <h5 class="credit">Robin HAJNOCZY & Mathis MICHEAU</h5>
+
+
+
+
 
 
   <script type="module" src="/main.js"></script>

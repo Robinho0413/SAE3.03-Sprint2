@@ -41,9 +41,18 @@ V.ChartVolume = function (hoursVolume) {
     var options = {
         chart: {
             type: 'bar',
-            width: 850,
-            height: 350,
-            background: '#2B2D3E'
+            width: 950,
+            height: 360,
+            background: '#FFF',
+            dropShadow: {
+                enabled: true,
+                top: 1,
+                left: 1,
+                blur: 1,
+                color: '#888',
+                opacity: 0.2
+            },
+            borderRadius: 5 // Bords arrondis
         },
         series: [{
             name: 'heures',
@@ -53,13 +62,13 @@ V.ChartVolume = function (hoursVolume) {
             title: {
                 text: 'Numéros de semaines',
                 style: {
-                    color: '#fff' // 
+                    color: '#343E59' // 
                 }
             },
             categories: V.generateWeekNumbers(), 
             labels: {
                 style: {
-                    colors: '#fff' // Couleur du texte des étiquettes de l'axe des abscisses
+                    colors: '#343E59' // Couleur du texte des étiquettes de l'axe des abscisses
                 }
             }
             
@@ -78,21 +87,21 @@ V.ChartVolume = function (hoursVolume) {
             },
             offsetY: -20, // Ajustez cette valeur pour régler la distance entre la barre et le libellé
             style: {
-                fontSize: '8px',
-                colors: ['#FFF'] // Couleur du texte
+                fontSize: '9px',
+                colors: ['#343E59'] // Couleur du texte
             }, 
             
-        }, 
+        },
         yaxis: {
             title: {
                 text: 'Heures',
                 style: {
-                    color: '#fff' // 
+                    color: '#343E59' // 
                 }
             },
             labels: {
                 style: {
-                colors: '#fff' // Couleur du texte des étiquettes de l'axe des abscisses
+                colors: '#343E59' // Couleur du texte des étiquettes de l'axe des abscisses
                 },
                 formatter: function (value) {
                     return Math.round(value); // Arrondir à un nombre entier
@@ -101,7 +110,7 @@ V.ChartVolume = function (hoursVolume) {
             forceNiceScale: true // Force les valeurs de l'axe Y à être des nombres entiers
         },
         tooltip: {
-            theme: 'dark',
+            theme: 'light',
             x: {
                 formatter: function (val) {
                     return 'Semaine ' + val; // Ajouter 'Semaine' devant le numéro
@@ -137,6 +146,7 @@ V.CreateStackedBar = function (cm, td, tp) {
 
     console.log(cmcopy)
     var options2 = {
+        
         series: [{
             name: 'CM',
             data: cmcopy,
@@ -147,11 +157,17 @@ V.CreateStackedBar = function (cm, td, tp) {
             name: 'TP',
             data: tpcopy
         },],
+        
         chart: {
             type: 'bar',
+            width: 800,
             height: 600,
             stacked: true,
+            background: '#FFF',
+            
+            
         },
+        
         plotOptions: {
             bar: {
                 horizontal: true,
@@ -170,9 +186,6 @@ V.CreateStackedBar = function (cm, td, tp) {
         stroke: {
             width: 1,
             colors: ['#fff']
-        },
-        title: {
-            text: 'Fiction Books Sales'
         },
         xaxis: {
             categories: V.generateWeekNumbers(),
@@ -216,18 +229,7 @@ V.CreateStackedBar = function (cm, td, tp) {
 
 }
 
-ApexCharts.exec('chart-id', 'updateOptions', {
-    chart: {
-        events: {
-            dataPointSelection: function (event, chartContext, config) {
-                // Changer la couleur des catégories CM, TD, TP en blanc
-                $('.apexcharts-category-labels text:contains("CM")').css('fill', '#FFFFFF');
-                $('.apexcharts-category-labels text:contains("TD")').css('fill', '#FFFFFF');
-                $('.apexcharts-category-labels text:contains("TP")').css('fill', '#FFFFFF');
-            }
-        }
-    }
-});
+
 
 // Iteration 3 : Chart volume horaires Resssources et SAE
 V.CreateRadar = function (S1R, S1S, S2R, S2S) {
@@ -256,15 +258,17 @@ V.CreateRadar = function (S1R, S1S, S2R, S2S) {
         }],
         
         chart: {
-            height: 320,
+            width : 400,
+            height: 360,
             type: 'radar',
+            background: '#FFF',
         },
         dataLabels: {
             enabled: true
         },
         plotOptions: {
             radar: {
-                size: 120,
+                size: 130,
                 polygons: {
                     strokeColors: '#e9e9e9',
                     fill: {
@@ -282,7 +286,7 @@ V.CreateRadar = function (S1R, S1S, S2R, S2S) {
         tooltip: {
             y: {
                 formatter: function (val) {
-                    return val
+                    return val +'h'
                 }
             }
         },
@@ -302,14 +306,7 @@ V.CreateRadar = function (S1R, S1S, S2R, S2S) {
                 }
             }
         },
-        tooltip: {
-            theme: 'dark',
-            x: {
-                formatter: function (val) {
-                    return 'Semaine ' + val; // Ajouter 'Semaine' devant le numéro
-                }
-            }
-        }
+        
 
 
     };
@@ -326,6 +323,120 @@ V.CreateRadar = function (S1R, S1S, S2R, S2S) {
     window.scrollTo(0, document.querySelector("#chart3").offsetTop)
 }
 
+
+// Iteration 4 
+V.endOfCourseTime = function(dataBut1G1, dataBut1G21, dataBut1G22, dataBut1G3, dataBut2G1, dataBut2G21, dataBut2G22, dataBut2G3, dataBut3G1, dataBut3G21, dataBut3G22, dataBut3G3){
+    var options = {
+            series: [{
+              name: "BUT1-G1",
+              data: dataBut1G1,
+              color: 'rgb(255, 69, 96)'
+            },
+            {
+              name: "BUT1-G21",
+              data: dataBut1G21,
+              color: 'rgb(255, 69, 96)'
+            },
+            {
+              name: 'BUT1-G22',
+              data: dataBut1G22,
+              color: 'rgb(255, 69, 96)'
+            },
+            {
+              name: 'BUT1-G3',
+              data: dataBut1G3,
+              color: 'rgb(255, 69, 96)'
+            },
+            {
+              name: 'BUT2-G1',
+              data: dataBut2G1,
+              color: 'rgb(0, 227, 150)'
+            },
+            {
+              name: 'BUT2-G21',
+              data: dataBut2G21,
+              color: 'rgb(0, 227, 150)'
+            },
+            {
+              name: 'BUT2-G22',
+              data: dataBut2G22,
+              color: 'rgb(0, 227, 150)'
+            },
+            {
+              name: 'BUT2-G3',
+              data: dataBut2G3,
+              color: 'rgb(0, 227, 150)'
+            },
+            {
+              name: 'BUT3-G1',
+              data: dataBut3G1,
+              color: 'rgb(0, 143, 251)'
+            },
+            {
+              name: 'BUT3-G21',
+              data: dataBut3G21,
+              color: 'rgb(0, 143, 251)'
+            },
+            {
+              name: 'BUT3-G22',
+              data: dataBut3G22,
+              color: 'rgb(0, 143, 251)'
+            },
+            {
+              name: 'BUT3-G3',
+              data: dataBut3G3,
+              color: 'rgb(0, 143, 251)'
+            }
+          ],
+            chart: {
+            height: 600,
+            width: 700,
+            type: 'line',
+            zoom: {
+              enabled: false
+            },
+            background: '#FFF',
+          },
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            width: 2,
+          },
+          
+          legend: {
+            tooltipHoverFormatter: function(val, opts) {
+              return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+            }
+          },
+          markers: {
+            size: 0,
+            hover: {
+              sizeOffset: 6
+            }
+          },
+          xaxis: {
+            categories: ['Lundi', 'Mardi','Mercredi','Jeudi','Vendredi']
+          },
+          tooltip: {
+            y: [
+              {
+                title: {
+                  formatter: function (val) {
+                    return val;
+                  }
+                }
+              }
+            ]
+          },
+          grid: {
+            borderColor: '#f1f1f1',
+          }
+          };
+    
+          V.chart4 = new ApexCharts(document.querySelector("#chart4"), options);
+          V.chart4.render();
+}
 
 
 

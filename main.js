@@ -19,16 +19,33 @@ C.init = function () {
   V.CreateStackedBar(data1, data2, data3)
 
 
-  
 
   window.scrollTo(0, 0)
   
   let it3 = document.querySelector('#select-it3');
   it3.addEventListener('change', C.handler_changeOnGroup3);
+
   //filtrer par groupe
   let group = document.querySelector('#select-groups');
   group.addEventListener('change', C.handler_changeOnGroup);
 
+
+  // Iteration 4
+  let dataBut1G1 = M.getClosingHoursByAllDays('BUT1-G1')
+  let dataBut1G21 = M.getClosingHoursByAllDays('BUT1-G21')
+  let dataBut1G22 = M.getClosingHoursByAllDays('BUT1-G22')
+  let dataBut1G3 = M.getClosingHoursByAllDays('BUT1-G3')
+
+  let dataBut2G1 = M.getClosingHoursByAllDays('BUT2-G1')
+  let dataBut2G21 = M.getClosingHoursByAllDays('BUT2-G21')
+  let dataBut2G22 = M.getClosingHoursByAllDays('BUT2-G22')
+  let dataBut2G3 = M.getClosingHoursByAllDays('BUT2-G3')
+
+  let dataBut3G1 = M.getClosingHoursByAllDays('BUT3-G1')
+  let dataBut3G21 = M.getClosingHoursByAllDays('BUT3-G21')
+  let dataBut3G22 = M.getClosingHoursByAllDays('BUT3-G22')
+  let dataBut3G3 = M.getClosingHoursByAllDays('BUT3-G3')
+  V.endOfCourseTime(dataBut1G1, dataBut1G21, dataBut1G22, dataBut1G3, dataBut2G1, dataBut2G21, dataBut2G22, dataBut2G3, dataBut3G1, dataBut3G21, dataBut3G22, dataBut3G3)
   
 
 }
